@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Socket.IO</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link href="./static/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<ul id="messages"></ul>
+	</div>
+
+	<div class="frm">
+		<input id="userName" autocomplete="off" class="userName" type="text" placeholder="Enter userName" />
+		<input id="m" autocomplete="off" class="message" type="text" placeholder="Enter message and press enter" />
+	</div>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.5.0/socket.io.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+        $( document ).ready(function() {
+            var socket = io();
+
+            
+            var randomUserName = "Anonymous-" +  Math.random().toString(36).substr(2, 5);
+            var randomColor = "#" + Math.random().toString(16).slice(2,8);
+            $('#userName').val(randomUserName);
+
+            var connectedMessage = "<span style='color:green;'><i>" + $('#userName').val() + "</i></span> connected to channel.";
+            socket.emit('chat message', connectedMessage);
+
+
+            socket.on('chat message', function(msg){
+                $('#messages').append($('<li>').html(msg));
+                window.scrollTo(0,document.body.scrollHeight);
+            });
+
+
+            $('#m').keypress(function (e) {
+                if (e.which == 13) { //Enter key
+                    var message = "<span style='color:" + randomColor + ";'><b>" + $('#userName').val() + ":</b></span> " + $('#m').val();
+
+                    socket.emit('chat message', message);
+
+                    $('#m').val('');
+                    return false;    
+                }
+            });
+
+            $('#userName').keypress(function (e) {
+                if (e.which == 13) { //Enter Key
+                    $('#m').focus()
+                    return false;    
+                }
+            });
+    
+           $(window).bind("beforeunload", function() { //Close window
+                var message = "<span style='color:red;'><i>" + $('#userName').val() + "</i></span> disconnected to channel.";
+                socket.emit('chat message', message); 
+            });
+
+        });
+
+      
+    </script>
+</body>
+
+</html>
