@@ -1,0 +1,18 @@
+{
+  "name": "05-packages",
+  "version": "0.1.0",
+  "description": "Packages",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Seckin Beduk",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
